@@ -1,0 +1,33 @@
+name: 'KeepActionAlive'
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  auto_renew:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout codes'
+        uses: actions/checkout@v2
+
+      - name: 'Write current date to file'
+        run: echo "Activity performed on $(date +'%Y-%m-%d %H:%M:%S')" > activity_date.txt && git add activity_date.txt
+
+      - name: 'Check for changes and commit'
+        id: commit_check
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git commit -m "Automated activity to keep workflow alive on $(date +'%Y-%m-%d')"
+          else
+            echo "has_changes:false"
+          fi
+
+      - name: 'Push changes to GitHub'
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }}
