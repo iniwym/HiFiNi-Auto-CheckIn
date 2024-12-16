@@ -6,6 +6,7 @@ package cloud.ohiyou;
  */
 
 import cloud.ohiyou.utils.DingTalkUtils;
+import cloud.ohiyou.utils.LarkUtils;
 import cloud.ohiyou.utils.TelegramUtils;
 import cloud.ohiyou.utils.WeChatWorkUtils;
 import cloud.ohiyou.vo.CookieSignResult;
@@ -40,6 +41,7 @@ public class Main {
     private static final String SERVER_CHAN_KEY = System.getenv("SERVER_CHAN"); // Service酱推送的key
     private static final String TG_CHAT_ID = System.getenv("TG_CHAT_ID"); // Telegram Chat ID
     private static final String TG_BOT_TOKEN = System.getenv("TG_BOT_TOKEN"); // Telegram Bot Token
+    private static final String LARK_KEY = System.getenv("LARK_KEY"); // 飞书机器人
     /** ↑↑↑↑↑↑↑↑↑↑ 正式 ↑↑↑↑↑↑↑↑↑↑ */
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -137,6 +139,7 @@ public class Main {
         // 推送
         WeChatWorkUtils.pushWechatServiceChan(SERVER_CHAN_KEY, title,messageBuilder.toString()); // 推送微信公众号Service酱
         WeChatWorkUtils.pushBotMessage(WXWORK_WEBHOOK, title, messageBuilder.toString(), "markdown"); // 推送企业微信机器人
+        LarkUtils.larkBotMessage(LARK_KEY, title, messageBuilder.toString()); // 飞书机器人
         DingTalkUtils.pushBotMessage(DINGTALK_WEBHOOK, title, messageBuilder.toString(), "", "markdown"); // 推送钉钉机器人
         TelegramUtils.publishTelegramBot(TG_CHAT_ID, TG_BOT_TOKEN, "HiFiNi签到消息: \n" + title + "：\n" + messageBuilder.toString()); // push telegram bot
     }
