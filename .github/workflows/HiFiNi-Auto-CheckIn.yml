@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     env:
-      COOKIE: ${{ secrets.COOKIE }}
+      USER: ${{ secrets.USER }}
       SERVER_CHAN: ${{ secrets.SERVER_CHAN }}
       DINGTALK_WEBHOOK: ${{ secrets.DINGTALK_WEBHOOK }}
       WXWORK_WEBHOOK: ${{ secrets.WXWORK_WEBHOOK }}
@@ -30,4 +30,4 @@ jobs:
       - name: Build with Ant
         run: |
           mvn compile
-          mvn exec:java -Dexec.mainClass="cloud.ohiyou.Main"
+          mvn exec:java -Dexec.mainClass="cloud.ohiyou.IniMain"

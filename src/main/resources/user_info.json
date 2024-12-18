@@ -1,0 +1,14 @@
+{
+  "info": [
+    {
+      "name": "user1",
+      "sign": "xxx",
+      "cookie": "xxx"
+    },
+    {
+      "name": "user2",
+      "sign": "xxx",
+      "cookie": "xxx"
+    }
+  ]
+}
