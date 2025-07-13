@@ -1,0 +1,21 @@
+name: KeepActionActivity
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  auto-process:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout HiFiNi-Auto-CheckIn
+        uses: actions/checkout@v3
+
+      - name: Commit & Push HiFiNi-Auto-CheckIn
+        if: github.event_name == 'schedule'
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "Keep Action Activity..."
+          git push origin main

@@ -1,26 +1,43 @@
-package cloud.ohiyou.utils;
+package cloud.ohiyou.service.impl;
 
 import okhttp3.*;
+import cloud.ohiyou.config.EnvConfig;
+import cloud.ohiyou.service.IMessagePushStrategy;
+import cloud.ohiyou.utils.ConfigReader;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import java.io.IOException;
 
 /**
  * 飞书机器人推送工具类
  */
-public class LarkUtils {
+public class LarkPushStrategy implements IMessagePushStrategy {
 
-    private static final Logger logger = LoggerFactory.getLogger(LarkUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(LarkPushStrategy.class);
 
-    public static void larkBotMessage(String larkKey, String messageTitle, String messageBody) {
+    private final OkHttpClient client;
+
+    public LarkPushStrategy(OkHttpClient client) {
+        this.client = client;
+    }
+
+    /**
+     * 推送消息
+     *
+     * @param title   推送的标题
+     * @param message 推送的消息（默认是markdown格式）
+     */
+    @Override
+    public void pushMessage(String title, String message) {
         // 构建完整的webhook URL
-        String webhookUrl = ConfigReader.getPropertyKey("api.url_lark") + larkKey;
+        String webhookUrl = ConfigReader.getPropertyKey("api.url_lark") + EnvConfig.get().getLarkKey();
 
         // 使用 fastjson 构建 JSON 对象
         JSONObject content = new JSONObject();
-        content.put("text", messageTitle + "\n" + messageBody);
+        content.put("text", message);
 
         JSONObject json = new JSONObject();
         json.put("msg_type", "text");
@@ -36,7 +53,6 @@ public class LarkUtils {
                 .build();
 
         // 发送请求并处理响应
-        OkHttpClient client = new OkHttpClient();
         try (Response response = client.newCall(request).execute()) {
             if (response.isSuccessful()) {
                 logger.info("飞书机器人消息发送成功！");

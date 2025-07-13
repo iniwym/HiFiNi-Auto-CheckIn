@@ -12,6 +12,7 @@ public class EnvConfig {
     private final String tgBotToken;
     private final String gotifyUrl;
     private final String gotifyAppToken;
+    private final String larkKey;
 
 
     private EnvConfig() {
@@ -24,6 +25,7 @@ public class EnvConfig {
         tgChatId = System.getenv("TG_CHAT_ID");
         gotifyUrl = System.getenv("GOTIFY_URL");
         gotifyAppToken = System.getenv("GOTIFY_APP_TOKEN");
+        larkKey = System.getenv("LARK_KEY");
     }
 
     public static EnvConfig get() {
@@ -65,5 +67,9 @@ public class EnvConfig {
 
     public String getWXWorkMessageType() {
         return wxWorkRobotMessageType;
+    }
+
+    public String getLarkKey() {
+        return larkKey;
     }
 }

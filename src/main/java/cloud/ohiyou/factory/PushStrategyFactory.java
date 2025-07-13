@@ -41,6 +41,10 @@ public class PushStrategyFactory {
             strategies.add(new TelegramPushStrategy(client));
             enablePlatforms.add("Telegram 机器人");
         }
+        if (StringUtils.isNotBlank(EnvConfig.get().getLarkKey())) {
+            strategies.add(new LarkPushStrategy(client));
+            enablePlatforms.add("飞书机器人");
+        }
 
         // 打印结果
         if (enablePlatforms.isEmpty()) {
